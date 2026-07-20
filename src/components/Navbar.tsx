@@ -4,10 +4,10 @@ import { Menu, X } from 'lucide-react';
 
 const links = [
   { label: '首页', href: '#home' },
-  { label: '作品', href: '#portfolio' },
+  { label: '作品展示', href: '#portfolio' },
   { label: '专业能力', href: '#expertise' },
   { label: '服务流程', href: '#workflow' },
-  { label: '联系我', href: '#contact' },
+  { label: '联系我们', href: '#contact' },
 ];
 
 // 新增接收 onNavClick 函数
@@ -41,7 +41,7 @@ export default function Navbar({ onNavClick }: { onNavClick?: (href: string) => 
       <div className={`glass-nav flex w-full max-w-6xl items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 sm:px-6 ${scrolled ? 'shadow-[0_8px_40px_-12px_rgba(255,107,0,0.25)]' : ''}`}>
         <button onClick={() => go('#home')} className="group flex items-center gap-2">
           <span className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-            测试测试测试<span className="text-ember-500">视觉</span>
+            这个是啥啥工作室之类的<span className="text-ember-500">视觉</span>
           </span>
           <span className="h-1.5 w-1.5 rounded-full bg-ember-500 shadow-[0_0_10px_2px_rgba(255,107,0,0.7)] transition-transform group-hover:scale-150" />
         </button>
