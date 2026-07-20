@@ -41,7 +41,7 @@ export default function Navbar({ onNavClick }: { onNavClick?: (href: string) => 
       <div className={`glass-nav flex w-full max-w-6xl items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 sm:px-6 ${scrolled ? 'shadow-[0_8px_40px_-12px_rgba(255,107,0,0.25)]' : ''}`}>
         <button onClick={() => go('#home')} className="group flex items-center gap-2">
           <span className="text-lg font-semibold tracking-tight text-white sm:text-xl">
-            这个是啥啥工作室之类的<span className="text-ember-500">视觉</span>
+            搞到了早上累死人<span className="text-ember-500">视觉</span>
           </span>
           <span className="h-1.5 w-1.5 rounded-full bg-ember-500 shadow-[0_0_10px_2px_rgba(255,107,0,0.7)] transition-transform group-hover:scale-150" />
         </button>
