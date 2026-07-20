@@ -26,7 +26,7 @@ export const journalCovers: Work[] = [
   { id: 'jc2', title: 'Nature Chemistry 封面', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
   { id: 'jc3', title: 'Advanced Materials', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
   { id: 'jc4', title: 'Cell 封面艺术', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
-  { id: 'jc5', title: 'Science 封面', category: '期刊封面设计', src: u('1554475901-45353dd4d56f') },
+  { id: 'jc5', title: 'Science 封面', category: '期刊封面设计', src: '/linimg/ss (10).webp'},
   { id: 'jc6', title: 'Angewandte Chemie', category: '期刊封面设计', src: u('1582719471384-894fbb16e074') },
   { id: 'jc7', title: 'PNAS 封面', category: '期刊封面设计', src: u('1532094349884-543bc11b42ec') },
   { id: 'jc8', title: 'ACS Nano', category: '期刊封面设计', src: u('1576086137411-9571c9c0b3a0') },
@@ -42,32 +42,32 @@ export const journalCovers: Work[] = [
 
 // 医学插画作品
 export const medicalIllustrations: Work[] = [
-  { id: 'mi1', title: '心脏解剖示意', category: '医学插画', src: u('1559757148-5c350d0d3c56') },
-  { id: 'mi2', title: '神经元突触', category: '医学插画', src: u('1576086137411-9571c9c0b3a0') },
-  { id: 'mi3', title: 'DNA 双螺旋艺术', category: '医学插画', src: u('1530026405186-ed1f139313f8') },
-  { id: 'mi4', title: '细胞分裂过程', category: '医学插画', src: u('1583912267550-d4cda2c0b3a0') },
-  { id: 'mi5', title: '病毒结构示意', category: '医学插画', src: u('1583912267550-d4cda2c0b3a0') },
-  { id: 'mi6', title: '骨骼系统解剖', category: '医学插画', src: u('1559757148-5c350d0d3c56') },
+  { id: 'mi1', title: '心脏解剖示意', category: '医学插画', src: '/linimg/ss (1).webp' },
+  { id: 'mi2', title: '神经元突触', category: '医学插画', src: '/linimg/ss (10).webp' },
+  { id: 'mi3', title: 'DNA 双螺旋艺术', category: '医学插画', src: '/linimg/ss (11).webp' },
+  { id: 'mi4', title: '细胞分裂过程', category: '医学插画', src: '/linimg/ss (1).webp' },
+  { id: 'mi5', title: '病毒结构示意', category: '医学插画', src: '/linimg/ss (10).webp' },
+  { id: 'mi6', title: '骨骼系统解剖', category: '医学插画', src: '/linimg/ss (11).webp' },
 ];
 
 // 材料化学可视化作品
 export const materialViz: Work[] = [
-  { id: 'mv1', title: 'MOF 框架结构', category: '材料化学可视化', src: u('1582719471384-894fbb16e074') },
-  { id: 'mv2', title: '纳米颗粒组装', category: '材料化学可视化', src: u('1532094349884-543bc11b42ec') },
-  { id: 'mv3', title: '晶体生长过程', category: '材料化学可视化', src: u('1554475901-45353dd4d56f') },
-  { id: 'mv4', title: '分子自组装', category: '材料化学可视化', src: u('1576086137411-9571c9c0b3a0') },
-  { id: 'mv5', title: '催化反应机理', category: '材料化学可视化', src: u('1582719471384-894fbb16e074') },
-  { id: 'mv6', title: '电镜结构重建', category: '材料化学可视化', src: u('1532094349884-543bc11b42ec') },
+  { id: 'mv1', title: 'MOF 框架结构', category: '材料化学可视化', src: '/linimg/ss (1).webp' },
+  { id: 'mv2', title: '纳米颗粒组装', category: '材料化学可视化', src: '/linimg/ss (10).webp' },
+  { id: 'mv3', title: '晶体生长过程', category: '材料化学可视化', src: '/linimg/ss (11).webp' },
+  { id: 'mv4', title: '分子自组装', category: '材料化学可视化', src: '/linimg/ss (1).webp' },
+  { id: 'mv5', title: '催化反应机理', category: '材料化学可视化', src: '/linimg/ss (10).webp' },
+  { id: 'mv6', title: '电镜结构重建', category: '材料化学可视化', src: '/linimg/ss (11).webp' },
 ];
 
 // 机制图/流程图作品
 export const mechanismDiagrams: Work[] = [
-  { id: 'md1', title: '信号通路机制图', category: '机制图/流程图', src: u('1576086137411-9571c9c0b3a0') },
-  { id: 'md2', title: '药物递送流程', category: '机制图/流程图', src: u('1559757148-5c350d0d3c56') },
-  { id: 'md3', title: '实验流程图', category: '机制图/流程图', src: u('1554475901-45353dd4d56f') },
-  { id: 'md4', title: '代谢通路示意', category: '机制图/流程图', src: u('1530026405186-ed1f139313f8') },
-  { id: 'md5', title: '免疫机制图', category: '机制图/流程图', src: u('1583912267550-d4cda2c0b3a0') },
-  { id: 'md6', title: '基因调控网络', category: '机制图/流程图', src: u('1576086137411-9571c9c0b3a0') },
+  { id: 'md1', title: '信号通路机制图', category: '机制图/流程图', src: '/linimg/ss (1).webp' },
+  { id: 'md2', title: '药物递送流程', category: '机制图/流程图', src: '/linimg/ss (10).webp' },
+  { id: 'md3', title: '实验流程图', category: '机制图/流程图', src: '/linimg/ss (11).webp' },
+  { id: 'md4', title: '代谢通路示意', category: '机制图/流程图', src: '/linimg/ss (1).webp' },
+  { id: 'md5', title: '免疫机制图', category: '机制图/流程图', src: '/linimg/ss (10).webp' },
+  { id: 'md6', title: '基因调控网络', category: '机制图/流程图', src: '/linimg/ss (11).webp' },
 ];
 
 // 专业工具名称列表
