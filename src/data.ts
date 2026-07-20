@@ -25,7 +25,7 @@ export const journalCovers: Work[] = [
   { id: 'jc1', title: 'JACS 2025 封面', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
   { id: 'jc2', title: 'Nature Chemistry 封面', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
   { id: 'jc3', title: 'Advanced Materials', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
-  { id: 'jc4', title: 'Cell 封面艺术', category: '期刊封面设计', src: u('1576086137411-9571c9c0b3a0') },
+  { id: 'jc4', title: 'Cell 封面艺术', category: '期刊封面设计', src: 'public/linimg/ss (1).webp' },
   { id: 'jc5', title: 'Science 封面', category: '期刊封面设计', src: u('1554475901-45353dd4d56f') },
   { id: 'jc6', title: 'Angewandte Chemie', category: '期刊封面设计', src: u('1582719471384-894fbb16e074') },
   { id: 'jc7', title: 'PNAS 封面', category: '期刊封面设计', src: u('1532094349884-543bc11b42ec') },
