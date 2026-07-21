@@ -29,7 +29,7 @@ export default function AboutUs({ onBack }: { onBack: () => void }) {
               <div className="overflow-hidden rounded-2xl">
                 {/* 宽高比改为 4:3 */}
                 <img 
-                  src="/public/linimg/aboutus.jpg" 
+                  src="/public/linimg/ss(12).webp" 
                   alt="关于我们图片" 
                   className="aspect-[4/3] w-full object-cover" 
                 />
