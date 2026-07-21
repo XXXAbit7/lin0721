@@ -24,8 +24,8 @@ export default function Ticker() {
           }}
         >
           <motion.div
-            animate={{ x: "-50%" }}
-            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            animate={{ x: "-80%" }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
             className="flex whitespace-nowrap items-center py-4"
           >
             {/* 循环数据：滚动内容 */}
