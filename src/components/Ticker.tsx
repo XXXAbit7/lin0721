@@ -32,7 +32,7 @@ export default function Ticker() {
             {[...journals, ...journals, ...journals].map((j, i) => (
               <span
                 key={i}
-                className="mx-8 sm:mx-12 font-display text-xl sm:text-2xl font-bold tracking-wider text-white/50 drop-shadow-[0_0_12px_rgba(255,107,0,0.5)]"
+                className="mx-8 sm:mx-12 font-display text-xl sm:text-2xl font-bold tracking-wider text-white/50 drop-shadow-[0_0_12px_rgba(255,107,0,0.6)]"
               >
                 {j}
               </span>
