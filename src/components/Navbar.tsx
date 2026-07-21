@@ -8,6 +8,7 @@ const links = [
   { label: '专业能力', href: '#expertise' },
   { label: '服务流程', href: '#workflow' },
   { label: '联系我们', href: '#contact' },
+  { label: '关于我们', href: '#about' }, // ✅ 在末尾新增关于我们
 ];
 
 // 新增接收 onNavClick 函数
