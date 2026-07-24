@@ -34,7 +34,7 @@ export default function Hero() {
           loop 
           playsInline 
         > 
-          <source src="/vd/123456.mp4" type="video/mp4" />
+          <source src="/vd/bg.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/85 to-ink-950" /> 
       </div>

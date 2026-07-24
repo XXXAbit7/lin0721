@@ -83,5 +83,5 @@ export const workflow = [
   { n: '05', title: '最终交付', desc: '按期刊规格输出高分辨率文件，支持打印/屏幕/视频多规格。' },
 ];
 
-export const heroVideoSrc = '/vd/123456.mp4';
+export const heroVideoSrc = '/vd/bg.mp4';
 export const heroFeaturedSrc = '/linimg/ss (3).webp';
