@@ -37,6 +37,7 @@ export const journalCovers: Work[] = [
   { id: 'jc13', title: 'Nature Energy', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
   { id: 'jc14', title: 'Nature Catalysis', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
   { id: 'jc15', title: 'Chemical Reviews', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
+  { id: 'jc16', title: 'Chemical Reviews', category: '期刊封面设计', src: '/linimg/ss (12).webp' },
   // 你可以在这里继续往下添加，直到 45 个...
 ].reverse();
 
