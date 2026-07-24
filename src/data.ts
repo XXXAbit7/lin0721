@@ -38,7 +38,7 @@ export const journalCovers: Work[] = [
   { id: 'jc14', title: 'Nature Catalysis', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
   { id: 'jc15', title: 'Chemical Reviews', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
   // 你可以在这里继续往下添加，直到 45 个...
-];
+].reverse();
 
 // 医学插画作品
 export const medicalIllustrations: Work[] = [
@@ -48,7 +48,7 @@ export const medicalIllustrations: Work[] = [
   { id: 'mi4', title: '细胞分裂过程', category: '医学插画', src: '/linimg/ss (1).webp' },
   { id: 'mi5', title: '病毒结构示意', category: '医学插画', src: '/linimg/ss (10).webp' },
   { id: 'mi6', title: '骨骼系统解剖', category: '医学插画', src: '/linimg/ss (11).webp' },
-];
+].reverse();
 
 // 材料化学可视化作品
 export const materialViz: Work[] = [
@@ -58,7 +58,7 @@ export const materialViz: Work[] = [
   { id: 'mv4', title: '分子自组装', category: '材料化学可视化', src: '/linimg/ss (1).webp' },
   { id: 'mv5', title: '催化反应机理', category: '材料化学可视化', src: '/linimg/ss (10).webp' },
   { id: 'mv6', title: '电镜结构重建', category: '材料化学可视化', src: '/linimg/ss (11).webp' },
-];
+].reverse();
 
 // 机制图/流程图作品
 export const mechanismDiagrams: Work[] = [
@@ -68,7 +68,7 @@ export const mechanismDiagrams: Work[] = [
   { id: 'md4', title: '代谢通路示意', category: '机制图/流程图', src: '/linimg/ss (1).webp' },
   { id: 'md5', title: '免疫机制图', category: '机制图/流程图', src: '/linimg/ss (10).webp' },
   { id: 'md6', title: '基因调控网络', category: '机制图/流程图', src: '/linimg/ss (11).webp' },
-];
+].reverse();
 
 // 专业工具名称列表
 export const tools = ['Blender', 'Cinema 4D', 'Maya', 'ZBrush', 'Illustrator', 'Photoshop', 'PyMOL', 'Procreate'];
