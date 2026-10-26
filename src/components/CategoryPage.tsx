@@ -16,7 +16,7 @@ function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => vo
       className="group glass relative block aspect-[4/5] overflow-hidden rounded-2xl text-left w-full">
       <img src={work.src} alt={work.title} loading="lazy"
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/15 to-transparent" />
       <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-ember-500/60 transition-opacity duration-500 group-hover:opacity-100" />
       <div className="absolute right-3 top-3 flex h-9 w-9 translate-x-12 items-center justify-center rounded-full bg-ember-500 text-white opacity-0 shadow-lg transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100">
         <ArrowUpRight size={18} />
@@ -55,7 +55,7 @@ export default function CategoryPage({ categoryId, onBack }: { categoryId: strin
         <button onClick={onBack} className="group flex items-center gap-2 text-sm text-neutral-400 hover:text-ember-400 transition-colors mb-10">
           <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" /> 返回首页
         </button>
-        
+
         <div className="mb-12">
           <h1 className="font-display text-3xl font-bold text-white sm:text-4xl">{category.title}</h1>
           <p className="mt-3 text-sm text-neutral-400">{category.subtitle}</p>
@@ -69,14 +69,14 @@ export default function CategoryPage({ categoryId, onBack }: { categoryId: strin
         {/* 分页控制 */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-6 mb-20">
-            <button disabled={page === 1} onClick={() => setPage(p => p - 1)} 
+            <button disabled={page === 1} onClick={() => setPage(p => p - 1)}
               className="p-3 glass rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:text-ember-400 transition-colors">
               <ChevronLeft size={20} />
             </button>
             <span className="text-sm font-medium text-neutral-300 tracking-widest">
               {page} / {totalPages}
             </span>
-            <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} 
+            <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)}
               className="p-3 glass rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:text-ember-400 transition-colors">
               <ChevronRight size={20} />
             </button>
@@ -94,7 +94,7 @@ export default function CategoryPage({ categoryId, onBack }: { categoryId: strin
         {active && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={close}
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-10"
-            style={{ background: 'rgba(5,5,5,0.85)', backdropFilter: 'blur(20px)' }}>
+            style={{ background: 'rgba(5,7,15,0.85)', backdropFilter: 'blur(20px)' }}>
             <button onClick={close} className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full glass-strong text-white transition-colors hover:text-ember-400" aria-label="关闭">
               <X size={22} />
             </button>

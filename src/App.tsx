@@ -7,7 +7,7 @@ import Expertise from './components/Expertise';
 import Workflow from './components/Workflow';
 import Contact from './components/Contact';
 import CategoryPage from './components/CategoryPage';
-import AboutUs from './components/AboutUs'; // 引入新建的页面
+import AboutUs from './components/AboutUs';
 
 export default function App() {
   // 控制当前展示的页面：null (首页), 'about' (关于我们), 或者 其他字符 (分类作品页)
@@ -51,7 +51,7 @@ export default function App() {
           <Hero />
           <Ticker />
           {/* 将状态更新函数传给作品展示组件 */}
-          <Portfolio onViewAll={setCurrentView} /> 
+          <Portfolio onViewAll={setCurrentView} />
           <Expertise />
           <Workflow />
           <Contact />

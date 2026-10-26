@@ -32,8 +32,8 @@ export default function Expertise() {
             <motion.div key={t} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}
               className="group relative flex items-center justify-center overflow-hidden rounded-2xl glass px-4 py-6 text-center transition-all hover:-translate-y-1">
               <span className="relative z-10 text-sm font-medium text-neutral-200 transition-colors group-hover:text-white">{t}</span>
-              <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:from-ember-500/20 group-hover:to-gold-500/10 group-hover:opacity-100" />
-              <div className="absolute -bottom-8 left-1/2 h-16 w-16 -translate-x-1/2 rounded-full bg-ember-500/0 blur-2xl transition-all duration-500 group-hover:bg-ember-500/40" />
+              <div className="absolute inset-0 bg-gradient-to-br from-ember-500/20 to-gold-500/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="absolute -bottom-8 left-1/2 h-16 w-16 -translate-x-1/2 rounded-full bg-ember-500/0 blur-2xl transition-all duration-500 group-hover:bg-ember-500/45" />
             </motion.div>
           ))}
         </motion.div>
@@ -41,9 +41,9 @@ export default function Expertise() {
       {/* [可修改] 卡片内边距 p-8 / p-12 */}
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}
         className="glass-strong relative mt-12 overflow-hidden rounded-3xl p-8 sm:p-12">
-        {/* [可修改] 装饰光斑颜色与大小 */}
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-ember-500/15 blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+        {/* [已更新] 装饰光斑颜色：主色 #4663b5 与辅色冰川青蓝 */}
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-ember-500/20 blur-3xl" />
+        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-gold-500/15 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[1fr_1.2fr] lg:items-center">
           <div>
             {/* [可修改] 卡片标题文字与字号 */}
@@ -56,7 +56,7 @@ export default function Expertise() {
           <div className="grid gap-3 sm:grid-cols-2">
             {specs.map((s) => (
               <div key={s} className="flex items-start gap-3 rounded-xl glass px-4 py-3">
-                <Check size={16} className="mt-0.5 shrink-0 text-ember-500" />
+                <Check size={16} className="mt-0.5 shrink-0 text-ember-400" />
                 <span className="text-xs text-neutral-200 sm:text-sm">{s}</span>
               </div>
             ))}

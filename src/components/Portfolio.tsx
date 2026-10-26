@@ -19,7 +19,7 @@ function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => vo
       className="group glass relative block aspect-[4/5] overflow-hidden rounded-2xl text-left">
       <img src={work.src} alt={work.title} loading="lazy"
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/15 to-transparent" />
       <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-ember-500/60 transition-opacity duration-500 group-hover:opacity-100" />
       <div className="absolute right-3 top-3 flex h-9 w-9 translate-x-12 items-center justify-center rounded-full bg-ember-500 text-white opacity-0 shadow-lg transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100">
         <ArrowUpRight size={18} />
@@ -32,7 +32,6 @@ function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => vo
   );
 }
 
-// 修改这里：接收 id 和 onViewAll 函数
 function SectionHeader({ title, subtitle, id, onViewAll }: { title: string; subtitle: string; id: string; onViewAll?: (id: string) => void }) {
   return (
     <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
@@ -48,7 +47,6 @@ function SectionHeader({ title, subtitle, id, onViewAll }: { title: string; subt
   );
 }
 
-// 修改这里：接收 onViewAll 函数
 export default function Portfolio({ onViewAll }: { onViewAll?: (id: string) => void }) {
   const [active, setActive] = useState<Work | null>(null);
   const close = useCallback(() => setActive(null), []);
@@ -66,7 +64,6 @@ export default function Portfolio({ onViewAll }: { onViewAll?: (id: string) => v
         <div key={sec.id} className="mb-20">
           <SectionHeader title={sec.title} subtitle={sec.subtitle} id={sec.id} onViewAll={onViewAll} />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
-            {/* 修改这里：强制首页每个分类只显示前 9 个 */}
             {sec.items.slice(0, 9).map((w, i) => <WorkCard key={w.id} work={w} onOpen={setActive} index={i} />)}
           </div>
         </div>
@@ -75,7 +72,7 @@ export default function Portfolio({ onViewAll }: { onViewAll?: (id: string) => v
         {active && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={close}
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-10"
-            style={{ background: 'rgba(5,5,5,0.85)', backdropFilter: 'blur(20px)' }}>
+            style={{ background: 'rgba(5,7,15,0.85)', backdropFilter: 'blur(20px)' }}>
             <button onClick={close} className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full glass-strong text-white transition-colors hover:text-ember-400" aria-label="关闭">
               <X size={22} />
             </button>

@@ -8,10 +8,9 @@ const links = [
   { label: '专业能力', href: '#expertise' },
   { label: '服务流程', href: '#workflow' },
   { label: '联系我们', href: '#contact' },
-  { label: '关于我们', href: '#about' }, // ✅ 在末尾新增关于我们
+  { label: '关于我们', href: '#about' },
 ];
 
-// 新增接收 onNavClick 函数
 export default function Navbar({ onNavClick }: { onNavClick?: (href: string) => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -39,12 +38,12 @@ export default function Navbar({ onNavClick }: { onNavClick?: (href: string) => 
       transition={{ duration: 0.7, ease: 'easeOut' }}
       className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-3 sm:pt-4"
     >
-      <div className={`glass-nav flex w-full max-w-6xl items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 sm:px-6 ${scrolled ? 'shadow-[0_8px_40px_-12px_rgba(255,107,0,0.25)]' : ''}`}>
+      <div className={`glass-nav flex w-full max-w-6xl items-center justify-between rounded-2xl px-4 py-3 transition-all duration-500 sm:px-6 ${scrolled ? 'shadow-[0_8px_40px_-12px_rgba(70,99,181,0.35)]' : ''}`}>
         <button onClick={() => go('#home')} className="group flex items-center gap-2">
           <span className="text-lg font-semibold tracking-tight text-white sm:text-xl">
             测试02060724 <span className="text-ember-500">视觉</span>
           </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-ember-500 shadow-[0_0_10px_2px_rgba(255,107,0,0.7)] transition-transform group-hover:scale-150" />
+          <span className="h-1.5 w-1.5 rounded-full bg-ember-500 shadow-[0_0_10px_2px_rgba(70,99,181,0.75)] transition-transform group-hover:scale-150" />
         </button>
         <div className="hidden items-center gap-1 md:flex">
           {links.map((l) => (
@@ -54,7 +53,7 @@ export default function Navbar({ onNavClick }: { onNavClick?: (href: string) => 
             </button>
           ))}
         </div>
-        <button onClick={() => setOpen((v) => !v)} className="rounded-lg p-2 text-neutral-200 hover:text-ember-500 md:hidden" aria-label="菜单">
+        <button onClick={() => setOpen((v) => !v)} className="rounded-lg p-2 text-neutral-200 hover:text-ember-400 md:hidden" aria-label="菜单">
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
@@ -63,7 +62,7 @@ export default function Navbar({ onNavClick }: { onNavClick?: (href: string) => 
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
             className="glass-nav absolute left-4 right-4 top-[68px] rounded-2xl p-3 md:hidden">
             {links.map((l) => (
-              <button key={l.href} onClick={() => go(l.href)} className="block w-full rounded-xl px-4 py-3 text-left text-sm text-neutral-200 transition-colors hover:bg-ember-500/10 hover:text-ember-400">
+              <button key={l.href} onClick={() => go(l.href)} className="block w-full rounded-xl px-4 py-3 text-left text-sm text-neutral-200 transition-colors hover:bg-ember-500/15 hover:text-ember-400">
                 {l.label}
               </button>
             ))}
