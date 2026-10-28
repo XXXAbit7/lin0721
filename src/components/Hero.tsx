@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, X } from 'lucide-react';
-import { heroFeaturedSrc } from '../data';
+import { heroFeatured } from '../data';
 
 const stats = [
   { num: '120+', label: '封面艺术' },
@@ -89,15 +89,15 @@ export default function Hero() {
             >
               <div className="overflow-hidden rounded-2xl">
                 <img
-                  src={heroFeaturedSrc}
-                  alt="近期 JACS 2025 封面艺术"
+                  src={heroFeatured.src}
+                  alt={heroFeatured.title}
                   className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
               </div>
               <div className="flex items-center justify-between px-3 py-2.5">
                 <div>
-                  <div className="text-[10px] uppercase tracking-wider text-ember-400">近期</div>
-                  <div className="text-sm font-medium text-white transition-colors group-hover:text-ember-400">JACS 2025 封面艺术</div>
+                  <div className="text-[10px] uppercase tracking-wider text-ember-400">{heroFeatured.tag}</div>
+                  <div className="text-sm font-medium text-white transition-colors group-hover:text-ember-400">{heroFeatured.title}</div>
                 </div>
                 <ArrowUpRight size={18} className="text-neutral-400 transition-colors group-hover:text-ember-400" />
               </div>
@@ -137,11 +137,11 @@ export default function Hero() {
               onClick={(e) => e.stopPropagation()}
               className="glass-strong relative max-h-[85vh] overflow-hidden rounded-3xl p-2"
             >
-              <img src={heroFeaturedSrc.replace(/w=\d+&h=\d+/, 'w=1200&h=1500')} alt="近期 JACS 2025 封面艺术" className="max-h-[80vh] w-auto rounded-2xl object-contain" />
+              <img src={heroFeatured.src.replace(/w=\d+&h=\d+/, 'w=1200&h=1500')} alt={heroFeatured.title} className="max-h-[80vh] w-auto rounded-2xl object-contain" />
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl glass px-4 py-2.5">
                 <div>
-                  <div className="text-[10px] uppercase tracking-wider text-ember-400">近期</div>
-                  <div className="text-sm font-medium text-white">JACS 2025 封面艺术</div>
+                  <div className="text-[10px] uppercase tracking-wider text-ember-400">{heroFeatured.tag}</div>
+                  <div className="text-sm font-medium text-white">{heroFeatured.title}</div>
                 </div>
               </div>
             </motion.div>

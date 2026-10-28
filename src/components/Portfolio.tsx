@@ -1,16 +1,7 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
-import { journalCovers, medicalIllustrations, materialViz, mechanismDiagrams, type Work } from '../data';
-
-type Section = { id: string; title: string; subtitle: string; items: Work[] };
-
-const sections: Section[] = [
-  { id: 'journal', title: '期刊封面设计', subtitle: '主力业务 · 顶级学术期刊封面艺术', items: journalCovers },
-  { id: 'medical', title: '医学插画', subtitle: '解剖 · 生理 · 病理可视化', items: medicalIllustrations },
-  { id: 'material', title: '材料化学可视化', subtitle: '分子 · 纳米 · 晶体结构', items: materialViz },
-  { id: 'mechanism', title: '机制图 / 流程图', subtitle: '信号通路 · 实验流程', items: mechanismDiagrams },
-];
+import { portfolioSections, type Work } from '../data';
 
 function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => void; index: number }) {
   return (
@@ -60,12 +51,18 @@ export default function Portfolio({ onViewAll }: { onViewAll?: (id: string) => v
           覆盖期刊封面、医学插画、材料化学可视化与机制流程图的完整科研视觉作品集。
         </p>
       </motion.div>
-      {sections.map((sec) => (
+      {portfolioSections.map((sec) => (
         <div key={sec.id} className="mb-20">
           <SectionHeader title={sec.title} subtitle={sec.subtitle} id={sec.id} onViewAll={onViewAll} />
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
-            {sec.items.slice(0, 9).map((w, i) => <WorkCard key={w.id} work={w} onOpen={setActive} index={i} />)}
-          </div>
+          {sec.items.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
+              {sec.items.slice(0, 9).map((w, i) => <WorkCard key={w.id} work={w} onOpen={setActive} index={i} />)}
+            </div>
+          ) : (
+            <div className="glass rounded-2xl p-8 text-center text-sm text-neutral-400">
+              当前板块暂无图片，请将图片放入独立文件夹：<code className="text-ember-400">{sec.folder}</code>
+            </div>
+          )}
         </div>
       ))}
       <AnimatePresence>

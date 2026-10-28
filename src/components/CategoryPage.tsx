@@ -1,14 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, X, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { journalCovers, medicalIllustrations, materialViz, mechanismDiagrams, type Work } from '../data';
-
-const categoriesData: Record<string, { title: string; subtitle: string; items: Work[] }> = {
-  'journal': { title: '期刊封面设计', subtitle: '主力业务 · 顶级学术期刊封面艺术', items: journalCovers },
-  'medical': { title: '医学插画', subtitle: '解剖 · 生理 · 病理可视化', items: medicalIllustrations },
-  'material': { title: '材料化学可视化', subtitle: '分子 · 纳米 · 晶体结构', items: materialViz },
-  'mechanism': { title: '机制图 / 流程图', subtitle: '信号通路 · 实验流程', items: mechanismDiagrams },
-};
+import { portfolioSections, type Work } from '../data';
 
 function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => void; index: number }) {
   return (
@@ -30,7 +23,7 @@ function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => vo
 }
 
 export default function CategoryPage({ categoryId, onBack }: { categoryId: string; onBack: () => void }) {
-  const category = categoriesData[categoryId];
+  const category = portfolioSections.find((sec) => sec.id === categoryId);
   const [page, setPage] = useState(1);
   const [active, setActive] = useState<Work | null>(null);
   const close = useCallback(() => setActive(null), []);
@@ -62,9 +55,15 @@ export default function CategoryPage({ categoryId, onBack }: { categoryId: strin
         </div>
 
         {/* 作品网格 */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 mb-16">
-          {currentItems.map((w, i) => <WorkCard key={w.id} work={w} onOpen={setActive} index={i} />)}
-        </div>
+        {currentItems.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 mb-16">
+            {currentItems.map((w, i) => <WorkCard key={w.id} work={w} onOpen={setActive} index={i} />)}
+          </div>
+        ) : (
+          <div className="glass rounded-2xl p-12 text-center text-sm text-neutral-400 mb-16">
+            当前板块暂无图片，请将图片放入独立文件夹：<code className="text-ember-400">{category.folder}</code>
+          </div>
+        )}
 
         {/* 分页控制 */}
         {totalPages > 1 && (

@@ -1,75 +1,104 @@
+import {
+  bannerItems as autoBannerItems,
+  journalCovers as autoJournalCovers,
+  medicalIllustrations as autoMedicalIllustrations,
+  materialViz as autoMaterialViz,
+  mechanismDiagrams as autoMechanismDiagrams,
+} from 'virtual:portfolio-data';
+
 export type Work = { id: string; title: string; category: string; src: string };
 
-// [可修改] 图片尺寸辅助函数：w=宽度, h=高度, q=画质(0-100)
-const u = (id: string, w = 800, h = 1000) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
+export type PortfolioSection = {
+  id: string;
+  title: string;
+  subtitle: string;
+  folder: string;
+  items: Work[];
+};
 
-// [新增] 动态滚动条的期刊名称数据
+// 动态滚动条的期刊名称数据
 export const journals = [
-  'Nature', 'Science', 'Cell', 'JACS', 'Angewandte Chemie', 
-  'Advanced Materials', 'PNAS', 'Nature Chemistry', 'Matter', 'Joule', 'Chem'
+  'Nature', 'Science', 'Cell', 'JACS', 'Angewandte Chemie',
+  'Advanced Materials', 'PNAS', 'Nature Chemistry', 'Matter', 'Joule', 'Chem',
 ];
 
-/* 
- * ==========================================
- * [可修改] 作品添加说明（支持二级页面自动排版）：
- * 1. 你可以在下面的数组中不断添加新作品。
- * 2. 首页会自动截取并只显示前 9 个作品。
- * 3. 点击“查看全部”进入二级页面后，系统会自动将这里的所有作品进行分页（每页9个）。
- * 4. 每个分类最多支持添加 45 个作品（即自动生成5页）。
- * ==========================================
+/*
+ * ============================================================================
+ * ★ [首页顶部 Banner 卡片配置]
+ * 对应独立文件夹：public/linimg/banner/
+ * - 只要把图片放进 public/linimg/banner/ 文件夹，首页右上角就会自动展示最新放入的那张图片
+ * - 图片的文件名（去掉扩展名）会自动变成卡片下方的标题文字
+ * ============================================================================
  */
+const HERO_BANNER_TAG = '近期'; // <-- 卡片标题上方的小标签文字（随时可改）
+const latestBanner = autoBannerItems[autoBannerItems.length - 1];
 
-// 期刊封面作品
-export const journalCovers: Work[] = [
-  { id: 'jc1', title: 'JACS 2025 封面', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
-  { id: 'jc2', title: 'Nature Chemistry 封面', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
-  { id: 'jc3', title: 'Advanced Materials', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
-  { id: 'jc4', title: 'Cell 封面艺术', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
-  { id: 'jc5', title: 'Science 封面', category: '期刊封面设计', src: '/linimg/ss (10).webp'},
-  { id: 'jc6', title: 'Angewandte Chemie', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
-  { id: 'jc7', title: 'PNAS 封面', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
-  { id: 'jc8', title: 'ACS Nano', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
-  { id: 'jc9', title: 'Joule 封面', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
-  { id: 'jc10', title: 'Matter 封面', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
-  { id: 'jc11', title: 'Chem 封面', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
-  { id: 'jc12', title: 'Nano Letters', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
-  { id: 'jc13', title: 'Nature Energy', category: '期刊封面设计', src: '/linimg/ss (10).webp' },
-  { id: 'jc14', title: 'Nature Catalysis', category: '期刊封面设计', src: '/linimg/ss (11).webp' },
-  { id: 'jc15', title: 'Chemical Reviews', category: '期刊封面设计', src: '/linimg/ss (1).webp' },
-  { id: 'jc16', title: 'Chemical Reviews', category: '期刊封面设计', src: '/linimg/ss (12).webp' },
-  // 你可以在这里继续往下添加，直到 45 个...
-].reverse();
+export const heroFeatured = {
+  tag: HERO_BANNER_TAG,
+  title: latestBanner ? latestBanner.title : 'JACS 2025 封面艺术',
+  src: latestBanner ? latestBanner.src : '/linimg/ss (3).webp',
+};
 
-// 医学插画作品
-export const medicalIllustrations: Work[] = [
-  { id: 'mi1', title: '心脏解剖示意', category: '医学插画', src: '/linimg/ss (1).webp' },
-  { id: 'mi2', title: '神经元突触', category: '医学插画', src: '/linimg/ss (10).webp' },
-  { id: 'mi3', title: 'DNA 双螺旋艺术', category: '医学插画', src: '/linimg/ss (11).webp' },
-  { id: 'mi4', title: '细胞分裂过程', category: '医学插画', src: '/linimg/ss (1).webp' },
-  { id: 'mi5', title: '病毒结构示意', category: '医学插画', src: '/linimg/ss (10).webp' },
-  { id: 'mi6', title: '骨骼系统解剖', category: '医学插画', src: '/linimg/ss (11).webp' },
-].reverse();
+export const heroVideoSrc = '/vd/bg.mp4';
+export const heroFeaturedSrc = heroFeatured.src;
 
-// 材料化学可视化作品
-export const materialViz: Work[] = [
-  { id: 'mv1', title: 'MOF 框架结构', category: '材料化学可视化', src: '/linimg/ss (1).webp' },
-  { id: 'mv2', title: '纳米颗粒组装', category: '材料化学可视化', src: '/linimg/ss (10).webp' },
-  { id: 'mv3', title: '晶体生长过程', category: '材料化学可视化', src: '/linimg/ss (11).webp' },
-  { id: 'mv4', title: '分子自组装', category: '材料化学可视化', src: '/linimg/ss (1).webp' },
-  { id: 'mv5', title: '催化反应机理', category: '材料化学可视化', src: '/linimg/ss (10).webp' },
-  { id: 'mv6', title: '电镜结构重建', category: '材料化学可视化', src: '/linimg/ss (11).webp' },
-].reverse();
+/*
+ * ============================================================================
+ * ★ [唯一修改处] 4个作品板块名称与独立文件夹配置中心
+ * 1. 板块1 对应独立文件夹：public/linimg/journal/
+ * 2. 板块2 对应独立文件夹：public/linimg/medical/
+ * 3. 板块3 对应独立文件夹：public/linimg/material/
+ * 4. 板块4 对应独立文件夹：public/linimg/mechanism/
+ * ============================================================================
+ */
+const SECTION_CONFIGS = [
+  {
+    id: 'journal',
+    title: '期刊封面设计',                     // <-- 板块1名称（随时可改）
+    subtitle: '主力业务 · 顶级学术期刊封面艺术', // <-- 板块1副标题（随时可改）
+    folder: 'public/linimg/journal',
+    rawItems: autoJournalCovers,
+  },
+  {
+    id: 'medical',
+    title: '医学插画',                         // <-- 板块2名称（随时可改）
+    subtitle: '解剖 · 生理 · 病理可视化',       // <-- 板块2副标题（随时可改）
+    folder: 'public/linimg/medical',
+    rawItems: autoMedicalIllustrations,
+  },
+  {
+    id: 'material',
+    title: '材料化学可视化',                   // <-- 板块3名称（随时可改）
+    subtitle: '分子 · 纳米 · 晶体结构',         // <-- 板块3副标题（随时可改）
+    folder: 'public/linimg/material',
+    rawItems: autoMaterialViz,
+  },
+  {
+    id: 'mechanism',
+    title: '机制图 / 流程图',                  // <-- 板块4名称（随时可改）
+    subtitle: '信号通路 · 实验流程',            // <-- 板块4副标题（随时可改）
+    folder: 'public/linimg/mechanism',
+    rawItems: autoMechanismDiagrams,
+  },
+];
 
-// 机制图/流程图作品
-export const mechanismDiagrams: Work[] = [
-  { id: 'md1', title: '信号通路机制图', category: '机制图/流程图', src: '/linimg/ss (1).webp' },
-  { id: 'md2', title: '药物递送流程', category: '机制图/流程图', src: '/linimg/ss (10).webp' },
-  { id: 'md3', title: '实验流程图', category: '机制图/流程图', src: '/linimg/ss (11).webp' },
-  { id: 'md4', title: '代谢通路示意', category: '机制图/流程图', src: '/linimg/ss (1).webp' },
-  { id: 'md5', title: '免疫机制图', category: '机制图/流程图', src: '/linimg/ss (10).webp' },
-  { id: 'md6', title: '基因调控网络', category: '机制图/流程图', src: '/linimg/ss (11).webp' },
-].reverse();
+// 自动将板块名称（title）绑定到该板块下所有图片的分类标签中
+export const portfolioSections: PortfolioSection[] = SECTION_CONFIGS.map((sec) => ({
+  id: sec.id,
+  title: sec.title,
+  subtitle: sec.subtitle,
+  folder: sec.folder,
+  items: sec.rawItems.map((item) => ({
+    ...item,
+    category: sec.title,
+  })),
+}));
+
+// 兼容导出
+export const journalCovers: Work[] = portfolioSections.find((s) => s.id === 'journal')?.items ?? [];
+export const medicalIllustrations: Work[] = portfolioSections.find((s) => s.id === 'medical')?.items ?? [];
+export const materialViz: Work[] = portfolioSections.find((s) => s.id === 'material')?.items ?? [];
+export const mechanismDiagrams: Work[] = portfolioSections.find((s) => s.id === 'mechanism')?.items ?? [];
 
 // 专业工具名称列表
 export const tools = ['Blender', 'Cinema 4D', 'Maya', 'ZBrush', 'Illustrator', 'Photoshop', 'PyMOL', 'Procreate'];
@@ -82,6 +111,3 @@ export const workflow = [
   { n: '04', title: '核对细化', desc: '支持多轮精细修改，与研究者逐项核对科学准确性。' },
   { n: '05', title: '最终交付', desc: '按期刊规格输出高分辨率文件，支持打印/屏幕/视频多规格。' },
 ];
-
-export const heroVideoSrc = '/vd/bg.mp4';
-export const heroFeaturedSrc = '/linimg/ss (3).webp';
