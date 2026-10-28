@@ -13,10 +13,10 @@ export interface WorkItem {
 
 // ==========================================
 // [可修改] 作品板块排序方向配置：
-// 'asc'  = 按上传先后正序排列（先上传的排前面，后上传的依次往后排）
-// 'desc' = 按上传先后倒序排列（最新上传的图片排在最前面）
+// 'desc' = 按上传先后倒序排列（最新上传的图片排在板块最上面/最前面）
+// 'asc'  = 按上传先后正序排列（最先上传的排前面，后上传的依次往后排）
 // ==========================================
-const SORT_ORDER: 'asc' | 'desc' = 'asc';
+const SORT_ORDER: 'asc' | 'desc' = 'desc';
 
 // 独立文件夹配置（包含首页 banner 与 4 个作品板块）
 const SECTIONS_CONFIG = [
@@ -63,7 +63,8 @@ function scanSectionFolder(rootDir: string, folder: string, prefix: string): Wor
     .map((entry) => {
       const fullPath = path.join(dirPath, entry.name);
       const stat = fs.statSync(fullPath);
-      const timestamp = stat.birthtimeMs || stat.ctimeMs || stat.mtimeMs;
+      // 取文件放入目录的变更时间/创建时间最大值，确保复制进来的旧图也能识别为最新放入
+      const timestamp = Math.max(stat.ctimeMs || 0, stat.birthtimeMs || 0, stat.mtimeMs || 0);
       return {
         name: entry.name,
         timestamp,
@@ -72,7 +73,7 @@ function scanSectionFolder(rootDir: string, folder: string, prefix: string): Wor
 
   const currentFileSet = new Set(imageFiles.map((f) => f.name));
 
-  // 1. 保留仍在文件夹中的已记录图片（维持原有上传顺序）
+  // 1. 保留仍在文件夹中的已记录图片（维持原有上传先后记录）
   const validSavedOrder = savedOrder.filter((name) => currentFileSet.has(name));
   const recordedSet = new Set(validSavedOrder);
 
@@ -100,7 +101,7 @@ function scanSectionFolder(rootDir: string, folder: string, prefix: string): Wor
     }
   }
 
-  // banner 文件夹始终按上传正序记录，其余板块按 SORT_ORDER 排列
+  // 4. 根据 SORT_ORDER 决定展示顺序（'desc' 时反转数组，让最新上传的排在第一个）
   const orderedList =
     folder === 'banner'
       ? finalUploadOrder
@@ -108,7 +109,7 @@ function scanSectionFolder(rootDir: string, folder: string, prefix: string): Wor
         ? [...finalUploadOrder].reverse()
         : finalUploadOrder;
 
-  // 4. 自动将文件名（去掉扩展名）作为网页展示区域的文字 title
+  // 5. 自动将文件名（去掉扩展名）作为网页展示区域的文字 title
   return orderedList.map((fileName, index) => {
     const titleText = path.parse(fileName).name;
     const encodedFileName = encodeURIComponent(fileName);
