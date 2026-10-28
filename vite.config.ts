@@ -27,7 +27,9 @@ const SECTIONS_CONFIG = [
   { key: 'mechanismDiagrams', folder: 'mechanism', prefix: 'md' },
 ] as const;
 
-const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif']);
+const IMAGE_EXTENSIONS = new Set([
+  '.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif', '.bmp', '.jfif',
+]);
 
 function scanSectionFolder(rootDir: string, folder: string, prefix: string): WorkItem[] {
   const dirPath = path.resolve(rootDir, 'public', 'linimg', folder);
@@ -62,19 +64,26 @@ function scanSectionFolder(rootDir: string, folder: string, prefix: string): Wor
     })
     .map((entry) => {
       const fullPath = path.join(dirPath, entry.name);
-      const stat = fs.statSync(fullPath);
-      // 取文件放入目录的变更时间/创建时间最大值，确保复制进来的旧图也能识别为最新放入
-      const timestamp = Math.max(stat.ctimeMs || 0, stat.birthtimeMs || 0, stat.mtimeMs || 0);
-      return {
-        name: entry.name,
-        timestamp,
-      };
-    });
+      try {
+        const stat = fs.statSync(fullPath);
+        // 过滤掉正在写入中、大小还为 0 的文件
+        if (stat.size === 0) return null;
+        const timestamp = Math.max(stat.ctimeMs || 0, stat.birthtimeMs || 0, stat.mtimeMs || 0);
+        return {
+          name: entry.name,
+          timestamp,
+          size: stat.size,
+        };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean) as { name: string; timestamp: number; size: number }[];
 
-  const currentFileSet = new Set(imageFiles.map((f) => f.name));
+  const currentFileMap = new Map(imageFiles.map((f) => [f.name, f]));
 
   // 1. 保留仍在文件夹中的已记录图片（维持原有上传先后记录）
-  const validSavedOrder = savedOrder.filter((name) => currentFileSet.has(name));
+  const validSavedOrder = savedOrder.filter((name) => currentFileMap.has(name));
   const recordedSet = new Set(validSavedOrder);
 
   // 2. 找出新放入的图片，按放入时间戳排序（若同时拖入多张则按文件名自然顺序）
@@ -110,14 +119,20 @@ function scanSectionFolder(rootDir: string, folder: string, prefix: string): Wor
         : finalUploadOrder;
 
   // 5. 自动将文件名（去掉扩展名）作为网页展示区域的文字 title
+  // 使用兼容 Vite decodeURI 的安全路径编码，并加上文件大小/时间戳防缓存破损
   return orderedList.map((fileName, index) => {
     const titleText = path.parse(fileName).name;
-    const encodedFileName = encodeURIComponent(fileName);
+    const safeFileName = encodeURI(fileName)
+      .replace(/#/g, '%23')
+      .replace(/\?/g, '%3F');
+    const fileInfo = currentFileMap.get(fileName);
+    const cacheBuster = fileInfo ? `?v=${ fileInfo.size }_${ Math.floor(fileInfo.timestamp) }` : '';
+
     return {
       id: `${prefix}_${index + 1}_${fileName}`,
       title: titleText,
       category: '',
-      src: `/linimg/${folder}/${encodedFileName}`,
+      src: `/linimg/${folder}/${safeFileName}${cacheBuster}`,
     };
   });
 }
@@ -166,16 +181,23 @@ function autoPortfolioPlugin(): Plugin {
 
       server.watcher.add(baseImgDir);
 
+      let reloadTimer: ReturnType<typeof setTimeout> | null = null;
+
       const handleFileChange = (filePath: string) => {
-        const normalized = path.normalize(filePath);
-        if (!normalized.startsWith(baseImgDir)) return;
+        const normalized = path.normalize(filePath).toLowerCase();
+        const normalizedBase = path.normalize(baseImgDir).toLowerCase();
+        if (!normalized.startsWith(normalizedBase)) return;
         if (path.basename(normalized) === '.upload-order.json') return;
 
-        const mod = server.moduleGraph.getModuleById(resolvedVirtualModuleId);
-        if (mod) {
-          server.moduleGraph.invalidateModule(mod);
-        }
-        server.ws.send({ type: 'full-reload' });
+        // 延迟 300ms 等待大图完全写入磁盘后再触发刷新，防止读取到半成品或 0KB 空文件
+        if (reloadTimer) clearTimeout(reloadTimer);
+        reloadTimer = setTimeout(() => {
+          const mod = server.moduleGraph.getModuleById(resolvedVirtualModuleId);
+          if (mod) {
+            server.moduleGraph.invalidateModule(mod);
+          }
+          server.ws.send({ type: 'full-reload' });
+        }, 300);
       };
 
       server.watcher.on('add', handleFileChange);

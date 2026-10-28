@@ -83,7 +83,6 @@ export default function Hero() {
           <motion.div style={{ y: yFeatured }} initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.3 }}
             className="relative mx-auto w-[230px] sm:w-[260px] lg:w-full lg:max-w-[320px]">
             <motion.div
-              layout
               onClick={() => setIsFullscreen(true)}
               className="group glass-strong cursor-pointer overflow-hidden rounded-3xl p-2 shadow-[0_20px_60px_-20px_rgba(70,99,181,0.5)]"
             >
@@ -91,6 +90,7 @@ export default function Hero() {
                 <img
                   src={heroFeatured.src}
                   alt={heroFeatured.title}
+                  decoding="async"
                   className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                 />
               </div>
@@ -129,15 +129,14 @@ export default function Hero() {
             </button>
 
             <motion.div
-              layoutId="hero-featured-image"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 200, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass-strong relative max-h-[85vh] overflow-hidden rounded-3xl p-2"
+              className="glass-strong relative max-h-[85vh] max-w-[90vw] overflow-hidden rounded-3xl p-2"
             >
-              <img src={heroFeatured.src.replace(/w=\d+&h=\d+/, 'w=1200&h=1500')} alt={heroFeatured.title} className="max-h-[80vh] w-auto rounded-2xl object-contain" />
+              <img src={heroFeatured.src} alt={heroFeatured.title} className="block max-h-[80vh] max-w-[85vw] h-auto w-auto rounded-2xl object-contain" />
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl glass px-4 py-2.5">
                 <div>
                   <div className="text-[10px] uppercase tracking-wider text-ember-400">{heroFeatured.tag}</div>

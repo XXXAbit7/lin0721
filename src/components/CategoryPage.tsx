@@ -5,10 +5,19 @@ import { portfolioSections, type Work } from '../data';
 
 function WorkCard({ work, onOpen, index }: { work: Work; onOpen: (w: Work) => void; index: number }) {
   return (
-    <motion.button layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: (index % 3) * 0.08 }} onClick={() => onOpen(work)}
-      className="group glass relative block aspect-[4/5] overflow-hidden rounded-2xl text-left w-full">
-      <img src={work.src} alt={work.title} loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+    <motion.button
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: (index % 3) * 0.06 }}
+      onClick={() => onOpen(work)}
+      className="group glass relative block aspect-[4/5] overflow-hidden rounded-2xl text-left w-full"
+    >
+      <img
+        src={work.src}
+        alt={work.title}
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-ink-950/85 via-ink-950/15 to-transparent" />
       <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 ring-1 ring-ember-500/60 transition-opacity duration-500 group-hover:opacity-100" />
       <div className="absolute right-3 top-3 flex h-9 w-9 translate-x-12 items-center justify-center rounded-full bg-ember-500 text-white opacity-0 shadow-lg transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100">
@@ -97,10 +106,10 @@ export default function CategoryPage({ categoryId, onBack }: { categoryId: strin
             <button onClick={close} className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full glass-strong text-white transition-colors hover:text-ember-400" aria-label="关闭">
               <X size={22} />
             </button>
-            <motion.div layoutId={active.id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 200, damping: 26 }} onClick={(e) => e.stopPropagation()}
-              className="glass-strong relative max-h-[85vh] overflow-hidden rounded-3xl p-2">
-              <img src={active.src.replace(/w=\d+&h=\d+/, 'w=1200&h=1500')} alt={active.title} className="max-h-[80vh] w-auto rounded-2xl object-contain" />
+              className="glass-strong relative max-h-[85vh] max-w-[90vw] overflow-hidden rounded-3xl p-2">
+              <img src={active.src} alt={active.title} className="block max-h-[80vh] max-w-[85vw] h-auto w-auto rounded-2xl object-contain" />
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-xl glass px-4 py-2.5">
                 <div>
                   <div className="text-[10px] uppercase tracking-wider text-ember-400">{active.category}</div>
