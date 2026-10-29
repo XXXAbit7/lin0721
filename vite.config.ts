@@ -13,6 +13,7 @@ export interface WorkItem {
 }
 
 const SECTIONS_CONFIG = [
+  { key: 'iconItems', folder: 'icon', prefix: 'ic' },
   { key: 'bannerItems', folder: 'banner', prefix: 'bn' },
   { key: 'journalCovers', folder: 'journal', prefix: 'jc' },
   { key: 'medicalIllustrations', folder: 'medical', prefix: 'mi' },
@@ -21,7 +22,7 @@ const SECTIONS_CONFIG = [
 ] as const;
 
 const IMAGE_EXTENSIONS = new Set([
-  '.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif', '.bmp', '.jfif',
+  '.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif', '.bmp', '.jfif', '.ico',
 ]);
 
 // 动态读取根目录下的 网站配置.js（带时间戳防缓存，支持保存即热更新）
@@ -118,7 +119,7 @@ function scanSectionFolder(
   }
 
   const orderedList =
-    folder === 'banner'
+    folder === 'banner' || folder === 'icon'
       ? finalUploadOrder
       : sortOrder === 'desc'
         ? [...finalUploadOrder].reverse()
@@ -158,11 +159,38 @@ function autoPortfolioAndConfigPlugin(): Plugin {
         }
       }
     },
-    // 自动替换 index.html 的浏览器标签页标题
+    // 自动替换 index.html 的浏览器标签页标题与标签页图标（Favicon）
     async transformIndexHtml(html) {
       const cfg = await loadUserSiteConfig(projectRoot);
-      if (!cfg || !cfg.browserTitle) return html;
-      return html.replace(/<title>[\s\S]*?<\/title>/, `<title>${cfg.browserTitle}</title>`);
+      let outputHtml = html;
+
+      // 1. 替换浏览器标签页标题
+      if (cfg?.browserTitle) {
+        outputHtml = outputHtml.replace(/<title>[\s\S]*?<\/title>/, `<title>${cfg.browserTitle}</title>`);
+      }
+
+      // 2. 自动检测 public/linimg/icon 文件夹中的最新图标，若无则使用 网站配置.js 中的 browserIcon
+      const iconItems = scanSectionFolder(projectRoot, 'icon', 'ic', 'asc');
+      const latestIcon = iconItems.length > 0 ? iconItems[iconItems.length - 1].src : cfg?.browserIcon;
+
+      if (latestIcon) {
+        const cleanUrl = latestIcon.split('?')[0].toLowerCase();
+        let linkTag = `<link rel="icon" type="image/png" sizes="32x32" href="${latestIcon}" />`;
+        if (cleanUrl.endsWith('.svg')) {
+          linkTag = `<link rel="icon" type="image/svg+xml" sizes="any" href="${latestIcon}" />`;
+        } else if (cleanUrl.endsWith('.ico')) {
+          linkTag = `<link rel="icon" type="image/x-icon" href="${latestIcon}" />`;
+        }
+
+        // 如果原 html 已有 rel="icon" 则替换，没有则自动插入到 </head> 前
+        if (/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*>/i.test(outputHtml)) {
+          outputHtml = outputHtml.replace(/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*>/i, linkTag);
+        } else {
+          outputHtml = outputHtml.replace('</head>', `  ${linkTag}\n  </head>`);
+        }
+      }
+
+      return outputHtml;
     },
     resolveId(id) {
       if (id === virtualModuleId) {
@@ -484,7 +512,6 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
 
         if (reloadTimer) clearTimeout(reloadTimer);
         reloadTimer = setTimeout(() => {
-          // 清空虚拟模块与组件缓存，触发浏览器热刷新
           server.moduleGraph.invalidateAll();
           server.ws.send({ type: 'full-reload' });
         }, 250);
