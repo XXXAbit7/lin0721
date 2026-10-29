@@ -3,7 +3,6 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import fs from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 
 export interface WorkItem {
   id: string;
@@ -25,17 +24,15 @@ const IMAGE_EXTENSIONS = new Set([
   '.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif', '.bmp', '.jfif', '.ico',
 ]);
 
-// 动态读取根目录下的 网站配置.js（带时间戳防缓存，支持保存即热更新）
-async function loadUserSiteConfig(rootDir: string): Promise<any> {
+function loadUserSiteConfig(rootDir: string): any {
   const configPath = path.resolve(rootDir, '网站配置.js');
   if (!fs.existsSync(configPath)) return null;
   try {
-    const stat = fs.statSync(configPath);
-    const fileUrl = `${pathToFileURL(configPath).href}?t=${stat.mtimeMs}_${Date.now()}`;
-    const mod = await import(fileUrl);
-    return mod.default || null;
+    const raw = fs.readFileSync(configPath, 'utf-8');
+    const executableCode = raw.replace(/export\s+default\s+/, 'return ');
+    return new Function(executableCode)();
   } catch (err) {
-    console.error('[网站配置.js 读取失败，请检查标点符号是否完整]:', err);
+    console.error('[网站配置.js 读取失败，请检查引号或逗号是否完整]:', err);
     return null;
   }
 }
@@ -159,17 +156,14 @@ function autoPortfolioAndConfigPlugin(): Plugin {
         }
       }
     },
-    // 自动替换 index.html 的浏览器标签页标题与标签页图标（Favicon）
-    async transformIndexHtml(html) {
-      const cfg = await loadUserSiteConfig(projectRoot);
+    transformIndexHtml(html) {
+      const cfg = loadUserSiteConfig(projectRoot);
       let outputHtml = html;
 
-      // 1. 替换浏览器标签页标题
       if (cfg?.browserTitle) {
         outputHtml = outputHtml.replace(/<title>[\s\S]*?<\/title>/, `<title>${cfg.browserTitle}</title>`);
       }
 
-      // 2. 自动检测 public/linimg/icon 文件夹中的最新图标，若无则使用 网站配置.js 中的 browserIcon
       const iconItems = scanSectionFolder(projectRoot, 'icon', 'ic', 'asc');
       const latestIcon = iconItems.length > 0 ? iconItems[iconItems.length - 1].src : cfg?.browserIcon;
 
@@ -182,7 +176,6 @@ function autoPortfolioAndConfigPlugin(): Plugin {
           linkTag = `<link rel="icon" type="image/x-icon" href="${latestIcon}" />`;
         }
 
-        // 如果原 html 已有 rel="icon" 则替换，没有则自动插入到 </head> 前
         if (/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*>/i.test(outputHtml)) {
           outputHtml = outputHtml.replace(/<link[^>]*rel=["'](?:shortcut )?icon["'][^>]*>/i, linkTag);
         } else {
@@ -197,9 +190,9 @@ function autoPortfolioAndConfigPlugin(): Plugin {
         return resolvedVirtualModuleId;
       }
     },
-    async load(id) {
+    load(id) {
       if (id === resolvedVirtualModuleId) {
-        const cfg = await loadUserSiteConfig(projectRoot);
+        const cfg = loadUserSiteConfig(projectRoot);
         const sortOrder: 'asc' | 'desc' = cfg?.portfolio?.sortOrder === 'asc' ? 'asc' : 'desc';
 
         const result: Record<string, WorkItem[]> = {};
@@ -215,12 +208,11 @@ function autoPortfolioAndConfigPlugin(): Plugin {
         ].join('\n');
       }
     },
-    // 在内存中将 网站配置.js 的内容自动注入各个组件，无需修改原组件文件
-    async transform(code, id) {
+    transform(code, id) {
       const cleanId = id.split('?')[0].replace(/\\/g, '/');
       if (!cleanId.includes('/src/')) return null;
 
-      const cfg = await loadUserSiteConfig(projectRoot);
+      const cfg = loadUserSiteConfig(projectRoot);
       if (!cfg) return null;
 
       // 1. 注入 src/data.ts
@@ -287,6 +279,10 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
       }
 
       let updated = code;
+      const gs = cfg.globalStyle || {};
+      const secSpacing = gs.sectionSpacing || 'py-24 sm:py-32';
+      const itemGap = gs.portfolioItemGap || 'mb-20';
+      const rounded = gs.cardRounded || 'rounded-2xl';
 
       // 2. 注入 Navbar.tsx
       if (cleanId.endsWith('/Navbar.tsx')) {
@@ -326,17 +322,20 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
         if (h.secondaryBtnText !== undefined) {
           updated = updated.replace('联系合作', h.secondaryBtnText);
         }
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-3xl/g, rounded).replace(/rounded-2xl/g, rounded);
+        }
         return updated;
       }
 
-      // 4. 注入 Portfolio.tsx
+      // 4. 注入 Portfolio.tsx（支持全局控制 sectionSpacing、portfolioItemGap、cardRounded）
       if (cleanId.endsWith('/Portfolio.tsx') && cfg.portfolio) {
         const p = cfg.portfolio;
         if (p.englishTag !== undefined) {
-          updated = updated.replace('>Portfolio</span>', `>${p.englishTag}</span>`);
+          updated = updated.replace(/>\s*Portfolio\s*<\/span>/, `>${p.englishTag}</span>`);
         }
         if (p.title !== undefined) {
-          updated = updated.replace('>作品展示</h2>', `>${p.title}</h2>`);
+          updated = updated.replace(/>\s*作品展示\s*<\/h2>/, `>${p.title}</h2>`);
         }
         if (p.description !== undefined) {
           updated = updated.replace(
@@ -346,6 +345,13 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
         }
         if (p.viewAllBtnText !== undefined) {
           updated = updated.replace('查看全部 →', p.viewAllBtnText);
+        }
+
+        // 替换间距与圆角
+        updated = updated.replace(/py-24 sm:py-32/g, secSpacing);
+        updated = updated.replace(/mb-20/g, itemGap);
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-2xl/g, rounded).replace(/rounded-3xl/g, rounded);
         }
         return updated;
       }
@@ -357,7 +363,7 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
           updated = updated.replace(/const specs = \[[\s\S]*?\];/, `const specs = ${JSON.stringify(e.specs)};`);
         }
         if (e.englishTag !== undefined) {
-          updated = updated.replace('>Expertise</span>', `>${e.englishTag}</span>`);
+          updated = updated.replace(/>\s*Expertise\s*<\/span>/, `>${e.englishTag}</span>`);
         }
         if (e.titleLine1 !== undefined && e.titleHighlight !== undefined) {
           updated = updated.replace(
@@ -372,13 +378,18 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
           );
         }
         if (e.cardTitle !== undefined) {
-          updated = updated.replace('>多规格清晰输出</h3>', `>${e.cardTitle}</h3>`);
+          updated = updated.replace(/>\s*多规格清晰输出\s*<\/h3>/, `>${e.cardTitle}</h3>`);
         }
         if (e.cardDescription !== undefined) {
           updated = updated.replace(
             '同时支持打印、屏幕、视频清晰输出规格，满足期刊投稿、学术演讲、科研宣传等全场景需求。',
             e.cardDescription
           );
+        }
+
+        updated = updated.replace(/py-24 sm:py-32/g, secSpacing);
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-2xl/g, rounded).replace(/rounded-3xl/g, rounded).replace(/rounded-xl/g, rounded);
         }
         return updated;
       }
@@ -387,16 +398,21 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
       if (cleanId.endsWith('/Workflow.tsx') && cfg.workflowSection) {
         const w = cfg.workflowSection;
         if (w.englishTag !== undefined) {
-          updated = updated.replace('>Workflow</span>', `>${w.englishTag}</span>`);
+          updated = updated.replace(/>\s*Workflow\s*<\/span>/, `>${w.englishTag}</span>`);
         }
         if (w.title !== undefined) {
-          updated = updated.replace('>工业交付级标准</h2>', `>${w.title}</h2>`);
+          updated = updated.replace(/>\s*工业交付级标准\s*<\/h2>/, `>${w.title}</h2>`);
         }
         if (w.description !== undefined) {
           updated = updated.replace(
             '从需求深访到最终交付，五步标准化流程确保科学严谨与视觉品质兼得。',
             w.description
           );
+        }
+
+        updated = updated.replace(/py-24 sm:py-32/g, secSpacing);
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-2xl/g, rounded).replace(/rounded-3xl/g, rounded);
         }
         return updated;
       }
@@ -414,7 +430,7 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
           updated = updated.replace(/const taobaoUrl = ['"].*?['"];/, `const taobaoUrl = ${JSON.stringify(c.taobaoUrl)};`);
         }
         if (c.englishTag !== undefined) {
-          updated = updated.replace('>Contact</span>', `>${c.englishTag}</span>`);
+          updated = updated.replace(/>\s*Contact\s*<\/(motion\.)?span>/, `>${c.englishTag}</$1span>`);
         }
         if (c.titlePrefix !== undefined && c.titleHighlight !== undefined && c.titleSuffix !== undefined) {
           updated = updated.replace(
@@ -429,7 +445,7 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
           );
         }
         if (c.taobaoBtnText !== undefined) {
-          updated = updated.replace('>访问淘宝官方店</span>', `>${c.taobaoBtnText}</span>`);
+          updated = updated.replace(/>\s*访问淘宝官方店\s*<\/span>/, `>${c.taobaoBtnText}</span>`);
         }
         if (c.wechatLabel !== undefined) {
           updated = updated.replace('label="微信咨询"', `label=${JSON.stringify(c.wechatLabel)}`);
@@ -443,15 +459,25 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
             `>${c.copyright}</p>`
           );
         }
+
+        updated = updated.replace(/py-24 sm:py-32/g, secSpacing);
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-2xl/g, rounded).replace(/rounded-3xl/g, rounded);
+        }
         return updated;
       }
 
-      // 8. 注入 CategoryPage.tsx 底部版权
-      if (cleanId.endsWith('/CategoryPage.tsx') && cfg.contact?.copyright !== undefined) {
-        updated = updated.replace(
-          '>© 2025 科学视觉 · 科研与医学插画设计工作室 · 保留所有权利</p>',
-          `>${cfg.contact.copyright}</p>`
-        );
+      // 8. 注入 CategoryPage.tsx
+      if (cleanId.endsWith('/CategoryPage.tsx')) {
+        if (cfg.contact?.copyright !== undefined) {
+          updated = updated.replace(
+            '>© 2025 科学视觉 · 科研与医学插画设计工作室 · 保留所有权利</p>',
+            `>${cfg.contact.copyright}</p>`
+          );
+        }
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-2xl/g, rounded).replace(/rounded-3xl/g, rounded);
+        }
         return updated;
       }
 
@@ -462,10 +488,10 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
           updated = updated.replace('src="/linimg/aboutus.jpg"', `src=${JSON.stringify(a.imageSrc)}`);
         }
         if (a.imageEnglishTag !== undefined) {
-          updated = updated.replace('>About Us</div>', `>${a.imageEnglishTag}</div>`);
+          updated = updated.replace(/>\s*About Us\s*<\/div>/, `>${a.imageEnglishTag}</div>`);
         }
         if (a.imageTitle !== undefined) {
-          updated = updated.replace('>关于我们团队</div>', `>${a.imageTitle}</div>`);
+          updated = updated.replace(/>\s*关于我们团队\s*<\/div>/, `>${a.imageTitle}</div>`);
         }
         if (a.titlePrefix !== undefined && a.titleHighlight !== undefined) {
           updated = updated.replace(
@@ -479,6 +505,9 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
             /<div className="mt-8 space-y-6 text-sm leading-relaxed text-neutral-300 sm:text-base">[\s\S]*?<\/div>/,
             `<div className="mt-8 space-y-6 text-sm leading-relaxed text-neutral-300 sm:text-base">\n              ${paragraphsHtml}\n            </div>`
           );
+        }
+        if (rounded !== 'rounded-2xl') {
+          updated = updated.replace(/rounded-2xl/g, rounded).replace(/rounded-3xl/g, rounded);
         }
         return updated;
       }
@@ -514,7 +543,7 @@ export const workflow = ${JSON.stringify(cfg.workflowSection?.steps || [])};
         reloadTimer = setTimeout(() => {
           server.moduleGraph.invalidateAll();
           server.ws.send({ type: 'full-reload' });
-        }, 250);
+        }, 200);
       };
 
       server.watcher.on('add', handleFileChange);
