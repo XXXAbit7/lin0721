@@ -13,7 +13,7 @@ export default {
   // 顶部导航栏菜单（只改 label 引号里的文字，不要改 href）
   navLinks: [
     { label: '首页', href: '#home' },
-    { label: '作品展示', href: '#portfolio' },
+    { label: '项目展示', href: '#portfolio' },
     { label: '专业能力', href: '#expertise' },
     { label: '服务流程', href: '#workflow' },
     { label: '联系我们', href: '#contact' },
@@ -56,7 +56,7 @@ export default {
   // --------------------------------------------------------------------------
   portfolio: {
     englishTag: 'Portfolio',
-    title: '作品展示',
+    title: '项目展示',
     description: '覆盖期刊封面、医学插画、材料化学可视化与机制流程图的完整科研视觉作品集。',
     viewAllBtnText: '查看全部 →',
 
