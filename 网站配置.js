@@ -18,13 +18,13 @@ export default {
   // --------------------------------------------------------------------------
   browserTitle: '科学视觉 | 科研与医学插画设计师', // 浏览器顶部标签页标题
   browserIcon: '/linimg/icon/favicon.png',         // 浏览器标签页图标路径（直接把图标放入 public/linimg/icon/ 文件夹即可）
-  brandPrefix: '测试02060724',                     // 左上角品牌名（白色字）
-  brandHighlight: '视觉',                          // 左上角品牌名后缀（蓝色高亮字）
+  brandPrefix: '左上角品牌名',                     // 左上角品牌名（白色字）
+  brandHighlight: '品牌名后缀',                          // 左上角品牌名后缀（蓝色高亮字）
 
   // 顶部导航栏菜单
   navLinks: [
     { label: '首页', href: '#home' },
-    { label: '作品展示', href: '#portfolio' },
+    { label: '项目展示', href: '#portfolio' },
     { label: '专业能力', href: '#expertise' },
     { label: '服务流程', href: '#workflow' },
     { label: '联系我们', href: '#contact' },
@@ -39,7 +39,7 @@ export default {
     titleLine1: '将严谨科研，',
     titleHighlight: '转化为视觉艺术',
     description: '专注于严谨学术期刊封面、医学插画与科研可视化表达。',
-    primaryBtnText: '查看作品',
+    primaryBtnText: '查看项目',
     secondaryBtnText: '联系合作',
 
     stats: [
@@ -65,8 +65,8 @@ export default {
   // --------------------------------------------------------------------------
   portfolio: {
     englishTag: 'Portfolio',
-    title: '作品展示',
-    description: '覆盖期刊封面、医学插画、材料化学可视化与机制流程图的完整科研视觉作品集。',
+    title: '项目展示',
+    description: '覆盖期刊封面、医学插画、材料化学可视化与机制流程图的完整科研视觉项目集。',
     viewAllBtnText: '查看全部 →',
     sortOrder: 'desc', // 'desc' = 最新放入的排最前面；'asc' = 最先放入的排最前面
 
@@ -112,10 +112,10 @@ export default {
     cardTitle: '多规格清晰输出',
     cardDescription: '同时支持打印、屏幕、视频清晰输出规格，满足期刊投稿、学术演讲、科研宣传等全场景需求。',
     specs: [
-      '打印规格：600dpi / CMYK / 矢量输出',
+      '打印规格：300dpi / CMYK / 矢量输出',
       '屏幕规格：4K 高清 / 适配网页与演示',
       '视频规格：4K / 60fps / 透明通道支持',
-      '源文件交付：可编辑分层工程文件',
+      '源文件交付：可编辑的专业工程文件',
     ],
   },
 
